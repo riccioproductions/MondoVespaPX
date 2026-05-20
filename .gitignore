@@ -1,0 +1,10 @@
+build/
+target/
+.settings/
+.classpath
+.project
+*.launch
+*.log
+db.properties
+Thumbs.db
+.DS_Store
