@@ -5,6 +5,5 @@ target/
 .project
 *.launch
 *.log
-db.properties
 Thumbs.db
 .DS_Store
