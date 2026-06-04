@@ -52,7 +52,7 @@
     %>
         <p><strong>Totale carrello: <%= totale %> €</strong></p>
         
-        <a href="${pageContext.request.contextPath}/ordine">Procedi all'acquisto</a>
+        <a href="${pageContext.request.contextPath}/area-utente/ordine">Procedi all'acquisto</a>
     <%
         } 
     %>

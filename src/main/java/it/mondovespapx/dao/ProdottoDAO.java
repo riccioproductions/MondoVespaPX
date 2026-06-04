@@ -97,4 +97,56 @@ public class ProdottoDAO {
 
         return p;
     }
+    
+    //Inserisce un prodotto
+    public void inserisci(Prodotto p) throws SQLException {
+        String sql = "INSERT INTO prodotti (nome, descrizione, prezzo, quantita_disponibile, immagine, id_categoria) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
+
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, p.getNome());
+        ps.setString(2, p.getDescrizione());
+        ps.setDouble(3, p.getPrezzo());
+        ps.setInt(4, p.getQuantitaDisponibile());
+        ps.setString(5, p.getImmagine());
+        ps.setInt(6, p.getIdCategoria());
+        ps.executeUpdate();
+
+        ps.close();
+        con.close();
+    }
+    
+    //Modifica un prodotto
+    public void aggiorna(Prodotto p) throws SQLException {
+        String sql = "UPDATE prodotti SET nome=?, descrizione=?, prezzo=?, " +
+                     "quantita_disponibile=?, immagine=?, id_categoria=? WHERE id=?";
+
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, p.getNome());
+        ps.setString(2, p.getDescrizione());
+        ps.setDouble(3, p.getPrezzo());
+        ps.setInt(4, p.getQuantitaDisponibile());
+        ps.setString(5, p.getImmagine());
+        ps.setInt(6, p.getIdCategoria());
+        ps.setInt(7, p.getId());
+        ps.executeUpdate();
+
+        ps.close();
+        con.close();
+    }
+    
+    //Elimina un prodotto
+    public void elimina(int id) throws SQLException {
+        String sql = "DELETE FROM prodotti WHERE id=?";
+
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.executeUpdate();
+
+        ps.close();
+        con.close();
+    }
 }

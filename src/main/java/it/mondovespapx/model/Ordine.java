@@ -8,6 +8,7 @@ public class Ordine {
     private Timestamp dataOrdine;   
     private String stato;          
     private double totale;   
+    private String nomeUtente;
 
     //Metodi Getters e setters
 
@@ -46,5 +47,13 @@ public class Ordine {
     
     public void setTotale(double totale) {
     	this.totale = totale; 
+    	}
+    
+    public String getNomeUtente() {
+    	return nomeUtente; 
+    	}
+    
+    public void setNomeUtente(String nomeUtente) {
+    	this.nomeUtente = nomeUtente; 
     	}
 }

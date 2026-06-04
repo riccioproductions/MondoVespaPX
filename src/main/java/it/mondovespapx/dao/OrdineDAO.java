@@ -118,4 +118,31 @@ public class OrdineDAO {
             con.close();
         }
     }
+    
+    //Restituisce tutti gli ordini effettuati
+    public List<Ordine> getAllOrdini() throws SQLException {
+        List<Ordine> lista = new ArrayList<>();
+        String sql = "SELECT o.*, u.nome, u.cognome FROM ordini o " +
+                     "JOIN utenti u ON o.id_utente = u.id " +
+                     "ORDER BY o.data_ordine DESC";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Ordine o = new Ordine();
+            o.setId(rs.getInt("id"));
+            o.setIdUtente(rs.getInt("id_utente"));
+            o.setNomeUtente(rs.getString("nome") + " " + rs.getString("cognome"));
+            o.setDataOrdine(rs.getTimestamp("data_ordine"));
+            o.setStato(rs.getString("stato"));
+            o.setTotale(rs.getDouble("totale"));
+            lista.add(o);
+        }
+        rs.close();
+        ps.close();
+        con.close();
+
+        return lista;
+    }
 }
