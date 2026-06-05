@@ -145,4 +145,18 @@ public class OrdineDAO {
 
         return lista;
     }
+    
+    //Aggiorna lo stato dell'ordine
+    public void aggiornaStato(int idOrdine, String stato) throws SQLException {
+        String sql = "UPDATE ordini SET stato=? WHERE id=?";
+
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, stato);
+        ps.setInt(2, idOrdine);
+        ps.executeUpdate();
+
+        ps.close();
+        con.close();
+    }
 }
