@@ -2,25 +2,38 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.mondovespapx.model.Prodotto" %>
 <%@ page import="it.mondovespapx.model.Categoria" %>
+<%@ page import="it.mondovespapx.model.Utente" %>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Catalogo - MondoVespaPX</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
 </head>
 <body>
-
 <header>
     <h1>MondoVespaPX</h1>
     <nav>
-        <a href="${pageContext.request.contextPath}/catalogo">Tutti i prodotti</a>
+        <a href="${pageContext.request.contextPath}/home">Home</a>
+        <a href="${pageContext.request.contextPath}/catalogo">Catalogo</a>
         <a href="${pageContext.request.contextPath}/carrello">Carrello</a>
-        <a href="${pageContext.request.contextPath}/login">Accedi</a>
+        <%
+            Utente utente = (Utente) session.getAttribute("utente");
+            if (utente != null) {
+        %>
+            <a href="${pageContext.request.contextPath}/area-utente/profilo"><%= utente.getNome() %></a>
+            <a href="${pageContext.request.contextPath}/logout">Esci</a>
+        <%
+            } else {
+        %>
+            <a href="${pageContext.request.contextPath}/login">Accedi</a>
+            <a href="${pageContext.request.contextPath}/registrazione">Registrati</a>
+        <%
+            }
+        %>
     </nav>
 </header>
-
 <main>
     <h2>Catalogo prodotti</h2>
 
@@ -54,6 +67,8 @@
         %>
             <div class="prodotto">
                 <h3><%= p.getNome() %></h3>
+                <% if (p.getImmagine() != null) { %>
+    			<img src="${pageContext.request.contextPath}/images/<%= p.getImmagine() %>" alt="<%= p.getNome() %>" width="200"><% } %>
                 <p><%= p.getDescrizione() %></p>
                 <p>Prezzo: <%= p.getPrezzo() %> €</p>
                 <a href="${pageContext.request.contextPath}/prodotto?id=<%= p.getId() %>">Dettagli</a>

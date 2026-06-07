@@ -1,4 +1,4 @@
-package it.mondovespapx.controller;
+package it.mondovespapx.control;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Admin - MondoVespaPX</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
 </head>
 <body>
 <header>

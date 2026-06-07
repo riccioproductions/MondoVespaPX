@@ -1,6 +1,5 @@
 package it.mondovespapx.filter;
 
-import it.mondovespapx.model.Utente;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -13,28 +12,29 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-//Filtro per il login
+//Filtro che intercetta tutte le richieste HTTP sotto "/area-utente/"
 @WebFilter("/area-utente/*")
 public class AuthFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {}
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        //Recupera la sessione corrente solo se true
+
+        //Recupera la sessione legata alla richiesta. false per evitare di creare una nuova sessione vuota nel caso in cui non ne esista una attiva
         HttpSession session = req.getSession(false);
-        Utente utente = null;
-        
-        //Se l'utente ha una sessione attiva, estrae l'oggetto utente dal login
+        String token = null;
+
+        //Se esiste una sessione attiva, estrae l'attributo "token"
         if (session != null) {
-            utente = (Utente) session.getAttribute("utente");
+            token = (String) session.getAttribute("token");
         }
-        //Se l'oggetto utente è null (no login oppure sessione scaduta) viene reindirizzato al login
-        if (utente == null) {
+        if (token == null) {
+            //Respinge la richiesta e reindirizza il client verso la pagina di login
             res.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        //Consente l'accesso
         chain.doFilter(request, response);
     }
     public void destroy() {}

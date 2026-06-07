@@ -1,4 +1,4 @@
-package it.mondovespapx.controller;
+package it.mondovespapx.control;
 
 import it.mondovespapx.dao.UtenteDAO;
 import it.mondovespapx.model.Utente;
@@ -35,15 +35,17 @@ public class LoginServlet extends HttpServlet {
             //Tenta l'autenticazione. Se fallisce, 'u' sarà null
             Utente u = dao.login(email, password);
             if (u != null) {
-                //Avvia la sessione per mantenere l'utente connesso durante la navigazione
+            	//Avvia la sessione per mantenere l'utente connesso durante la navigazione
                 HttpSession session = request.getSession();
                 session.setAttribute("utente", u);
+                session.setAttribute("token", "logged");
                 //Controllo degli accessi in base al ruolo
                 if ("admin".equals(u.getRuolo())) {
+                    session.setAttribute("tokenAdmin", "admin");
                     //Gli amministratori vengono reindirizzati al loro pannello di controllo
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 } else {
-                    //I clienti vengono inviati al catalogo prodotti
+                	//I clienti vengono inviati al catalogo prodotti
                     response.sendRedirect(request.getContextPath() + "/catalogo");
                 }
             //Se le credenziali sono errate

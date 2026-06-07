@@ -9,6 +9,8 @@ public class Ordine {
     private String stato;          
     private double totale;   
     private String nomeUtente;
+    private String indirizzoSpedizione;
+    private String metodoPagamento;
 
     //Metodi Getters e setters
 
@@ -55,5 +57,21 @@ public class Ordine {
     
     public void setNomeUtente(String nomeUtente) {
     	this.nomeUtente = nomeUtente; 
+    	}
+
+    public String getIndirizzoSpedizione() {
+    	return indirizzoSpedizione; 
+    	}
+    
+    public void setIndirizzoSpedizione(String indirizzoSpedizione) {
+    	this.indirizzoSpedizione = indirizzoSpedizione; 
+    	}
+
+    public String getMetodoPagamento() {
+    	return metodoPagamento; 
+    	}
+    
+    public void setMetodoPagamento(String metodoPagamento) {
+    	this.metodoPagamento = metodoPagamento; 
     	}
 }

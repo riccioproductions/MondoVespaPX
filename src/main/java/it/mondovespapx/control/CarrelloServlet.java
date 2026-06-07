@@ -1,4 +1,4 @@
-package it.mondovespapx.controller;
+package it.mondovespapx.control;
 
 import it.mondovespapx.model.ElementoCarrello;
 import jakarta.servlet.RequestDispatcher;
@@ -51,51 +51,73 @@ public class CarrelloServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Legge l'azione che l'utente vuole eseguire
+        //Legge il parametro azione per capire quale operazione eseguire
         String azione = request.getParameter("azione");
-        
-        //Recupera la sessione corrente
         HttpSession session = request.getSession();
-        //Recupera il carrello dalla sessione o lo crea vuoto se non esiste
+        //Recupera il carrello dalla memoria della sessione
         @SuppressWarnings("unchecked")
         List<ElementoCarrello> carrello = (List<ElementoCarrello>) session.getAttribute("carrello");
+        //Se il carrello non esiste, inizializza una nuova lista vuota e la salva in sessione
         if (carrello == null) {
             carrello = new ArrayList<>();
             session.setAttribute("carrello", carrello);
         }
-        // Se l'azione è "aggiungi" oppure non è specificata
-        if ("aggiungi".equals(azione) || azione == null) {
-            
-            //Legge i dati del prodotto inviati dal form e li converte nei formati corretti
+        //aggiungere un nuovo prodotto
+        if ("aggiungi".equals(azione) || azione == null) {           
+            //Estrae i dettagli del prodotto
             int idProdotto = Integer.parseInt(request.getParameter("idProdotto"));
             String nomeProdotto = request.getParameter("nomeProdotto");
             double prezzo = Double.parseDouble(request.getParameter("prezzo"));
             int quantita = Integer.parseInt(request.getParameter("quantita"));
-
             boolean trovato = false;
             
-            //Cerca se il prodotto è già presente nel carrello
+            //Scorre il carrello per verificare se il prodotto è già presente
             for (ElementoCarrello e : carrello) {
                 if (e.getIdProdotto() == idProdotto) {
-                    //Se esiste già, aggiorna solo la quantità sommandola a quella vecchia
+                    //Se esiste, somma la nuova quantità a quella già presente
                     e.setQuantita(e.getQuantita() + quantita);
                     trovato = true;
-                    break;
+                    break; 
                 }
             }
 
-            //Se il prodotto non era già nel carrello crea una nuova riga e lo aggiunge
+            //Se il prodotto non era nel carrello, crea un nuovo elemento e lo accoda alla lista
             if (!trovato) {
                 carrello.add(new ElementoCarrello(idProdotto, nomeProdotto, prezzo, quantita));
             }
 
-        //Se l'azione è rimuovi legge l'ID del prodotto da eliminare e lo rimuove
+        //Rimuovere completamente un prodotto
         } else if ("rimuovi".equals(azione)) {
             int idProdotto = Integer.parseInt(request.getParameter("idProdotto"));
+            //rimuove l'elemento che corrisponde all'ID
             carrello.removeIf(e -> e.getIdProdotto() == idProdotto);
+
+        //Modificare la quantità esatta di un prodotto già presente
+        } else if ("aggiorna".equals(azione)) {
+            int idProdotto = Integer.parseInt(request.getParameter("idProdotto"));
+            int quantita = Integer.parseInt(request.getParameter("quantita"));
+
+            //Scorre il carrello per trovare il prodotto da aggiornare
+            for (ElementoCarrello e : carrello) {
+                if (e.getIdProdotto() == idProdotto) {
+                    //Se l'utente imposta la quantità a 0 o meno, il prodotto viene rimosso
+                    if (quantita <= 0) {
+                        carrello.remove(e);
+                    } else {
+                        //Altrimenti sovrascrive la vecchia quantità con il nuovo valore esatto
+                        e.setQuantita(quantita);
+                    }
+                    break; 
+                }
+            }
+
+        //Svuotare l'intero carrello
+        } else if ("svuota".equals(azione)) {
+            //Elimina istantaneamente tutti gli elementi presenti nella lista
+            carrello.clear();
         }
 
-        //Ricarica la pagina del carrello per evitare il reinvio del form e acquisti doppi
+        //Ricarica la pagina per evitare che l'utente invii la stessa operazione due volte
         response.sendRedirect(request.getContextPath() + "/carrello");
     }
 }

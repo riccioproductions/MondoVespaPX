@@ -1,6 +1,5 @@
 package it.mondovespapx.filter;
 
-import it.mondovespapx.model.Utente;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -11,39 +10,36 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
-//Filtro per il login admin
+//Filtro di sicurezza per le pagine di amministrazione
 @WebFilter("/admin/*")
 public class AdminFilter implements Filter {
+
     public void init(FilterConfig filterConfig) throws ServletException {}
 
+    //ogni singola richiesta verso gli URL "/admin/*"
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        //Converte gli oggetti base in oggetti HTTP per leggere URL, header e sessioni
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        
-        //Recupera la sessione corrente solo se true
+
+        //Recupera la sessione attiva ed evita di crearne una nuova in memoria se non esiste
         HttpSession session = req.getSession(false);
-        Utente utente = null;
-
-        //Se l'utente ha una sessione attiva, estrae l'oggetto utente dal login
+        String tokenAdmin = null;
+        //Se la sessione è valida, estrae il token per l'admin
         if (session != null) {
-            utente = (Utente) session.getAttribute("utente");
+            tokenAdmin = (String) session.getAttribute("tokenAdmin");
         }
-
-        //Se l'oggetto utente è null (no login oppure sessione scaduta) viene reindirizzato al login
-        if (utente == null || !"admin".equals(utente.getRuolo())) {
+        //Se la sessione è scaduta o l'utente non ha il token da admin
+        if (tokenAdmin == null) {
+            //Nega l'accesso e reindirizza verso il form di login
             res.sendRedirect(req.getContextPath() + "/login");
-           
-            //Blocca l'esecuzione per evitare che la pagina admin venga caricata
             return;
         }
-        //Autorizza la richiesta
         chain.doFilter(request, response);
     }
-
     public void destroy() {}
 }

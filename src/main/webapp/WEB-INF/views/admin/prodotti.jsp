@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestione prodotti - MondoVespaPX</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
 </head>
 <body>
 <header>
@@ -22,7 +22,7 @@
 <main>
     <h2>Gestione prodotti</h2>
     <h3>Inserisci nuovo prodotto</h3>
-    <form action="${pageContext.request.contextPath}/admin/prodotti" method="post">
+    <form action="${pageContext.request.contextPath}/admin/prodotti" method="post" enctype="multipart/form-data">
         
         <input type="hidden" name="azione" value="inserisci">
 

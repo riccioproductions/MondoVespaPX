@@ -1,4 +1,4 @@
-package it.mondovespapx.controller;
+package it.mondovespapx.control;
 
 import it.mondovespapx.dao.OrdineDAO;
 import it.mondovespapx.model.DettaglioOrdine;
@@ -69,9 +69,13 @@ public class OrdineServlet extends HttpServlet {
         }
 
         //Crea l'oggetto di testa dell'ordine assegnandolo all'utente corrente
+        String indirizzo = request.getParameter("indirizzo");
+        String metodoPagamento = request.getParameter("metodoPagamento");
         Ordine ordine = new Ordine();
         ordine.setIdUtente(utente.getId());
         ordine.setTotale(totale);
+        ordine.setIndirizzoSpedizione(indirizzo);
+        ordine.setMetodoPagamento(metodoPagamento);
         //repara la lista che conterrà i singoli prodotti acquistati
         List<DettaglioOrdine> dettagli = new ArrayList<>();
         //Converte ogni riga del carrello temporaneo in una riga definitiva dell'ordine

@@ -1,23 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="it.mondovespapx.model.Prodotto" %>
+<%@ page import="it.mondovespapx.model.Utente" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Dettaglio prodotto - MondoVespaPX</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
 </head>
 <body>
-
 <header>
     <h1>MondoVespaPX</h1>
     <nav>
+        <a href="${pageContext.request.contextPath}/home">Home</a>
         <a href="${pageContext.request.contextPath}/catalogo">Catalogo</a>
         <a href="${pageContext.request.contextPath}/carrello">Carrello</a>
-        <a href="${pageContext.request.contextPath}/login">Accedi</a>
+        <%
+            Utente utente = (Utente) session.getAttribute("utente");
+            if (utente != null) {
+        %>
+            <a href="${pageContext.request.contextPath}/area-utente/profilo"><%= utente.getNome() %></a>
+            <a href="${pageContext.request.contextPath}/logout">Esci</a>
+        <%
+            } else {
+        %>
+            <a href="${pageContext.request.contextPath}/login">Accedi</a>
+            <a href="${pageContext.request.contextPath}/registrazione">Registrati</a>
+        <%
+            }
+        %>
     </nav>
 </header>
-
 <main>
     <%
         //Recupera l'oggetto passato dalla Servlet
@@ -26,6 +39,8 @@
 
     <%--Stampa i dati del prodotto leggendoli dai metodi getters--%>
     <h2><%= p.getNome() %></h2>
+    <% if (p.getImmagine() != null) { %>
+    <img src="${pageContext.request.contextPath}/images/<%= p.getImmagine() %>" alt="<%= p.getNome() %>" width="300"> <% } %>
     <p><%= p.getDescrizione() %></p>
     <p>Prezzo: <%= p.getPrezzo() %> €</p>
     <p>Disponibilità: <%= p.getQuantitaDisponibile() %> pezzi</p>

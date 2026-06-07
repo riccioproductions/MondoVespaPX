@@ -73,11 +73,13 @@ public class OrdineDAO {
         con.setAutoCommit(false);
         try {
             //Inserisce i dati generali dell'ordine (totale, utente, stato)
-            String sqlOrdine = "INSERT INTO ordini (id_utente, totale, stato) VALUES (?, ?, 'in attesa')";
-            //RETURN_GENERATED_KEYS chiede al database di restituirci l'ID appena creato
-            PreparedStatement ps = con.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, o.getIdUtente());
-            ps.setDouble(2, o.getTotale());
+        	String sqlOrdine = "INSERT INTO ordini (id_utente, totale, stato, indirizzo_spedizione, metodo_pagamento) " +
+                    "VALUES (?, ?, 'in attesa', ?, ?)";
+        		PreparedStatement ps = con.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS);
+        		ps.setInt(1, o.getIdUtente());
+        		ps.setDouble(2, o.getTotale());
+        		ps.setString(3, o.getIndirizzoSpedizione());
+        		ps.setString(4, o.getMetodoPagamento());
             ps.executeUpdate();
 
             //Legge l'ID generato per il nuovo ordine
@@ -158,5 +160,53 @@ public class OrdineDAO {
 
         ps.close();
         con.close();
+    }
+    
+    //Restituisce gli ordini filtrati per data
+    public List<Ordine> getOrdiniFiltrati(String dataInizio, String dataFine, String cliente) throws SQLException {
+        List<Ordine> lista = new ArrayList<>();
+        String sql = "SELECT o.*, u.nome, u.cognome FROM ordini o " +
+                     "JOIN utenti u ON o.id_utente = u.id " +
+                     "WHERE 1=1 ";
+        if (dataInizio != null && !dataInizio.isEmpty()) {
+            sql += "AND DATE(o.data_ordine) >= ? ";
+        }
+        if (dataFine != null && !dataFine.isEmpty()) {
+            sql += "AND DATE(o.data_ordine) <= ? ";
+        }
+        if (cliente != null && !cliente.isEmpty()) {
+            sql += "AND (u.nome LIKE ? OR u.cognome LIKE ? OR u.email LIKE ?) ";
+        }
+
+        sql += "ORDER BY o.data_ordine DESC";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        int i = 1;
+        if (dataInizio != null && !dataInizio.isEmpty()) {
+            ps.setString(i++, dataInizio);
+        }
+        if (dataFine != null && !dataFine.isEmpty()) {
+            ps.setString(i++, dataFine);
+        }
+        if (cliente != null && !cliente.isEmpty()) {
+            ps.setString(i++, "%" + cliente + "%");
+            ps.setString(i++, "%" + cliente + "%");
+            ps.setString(i++, "%" + cliente + "%");
+        }
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Ordine o = new Ordine();
+            o.setId(rs.getInt("id"));
+            o.setIdUtente(rs.getInt("id_utente"));
+            o.setNomeUtente(rs.getString("nome") + " " + rs.getString("cognome"));
+            o.setDataOrdine(rs.getTimestamp("data_ordine"));
+            o.setStato(rs.getString("stato"));
+            o.setTotale(rs.getDouble("totale"));
+            lista.add(o);
+        }
+        rs.close();
+        ps.close();
+        con.close();
+        return lista;
     }
 }

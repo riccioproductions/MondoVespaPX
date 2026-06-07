@@ -1,4 +1,4 @@
-package it.mondovespapx.controller;
+package it.mondovespapx.control;
 
 import it.mondovespapx.dao.CategoriaDAO;
 import it.mondovespapx.dao.ProdottoDAO;

@@ -1,0 +1,298 @@
+@charset "UTF-8";
+/*azzera i margini e i padding predefiniti del browser */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* catettere, colore di sfondo e primo piano */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+/* header */
+header {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Colore dell'header */
+header h1 {
+    font-size: 24px;
+    color: #e8a020;
+}
+
+/* Collegamenti del menu di navigazione */
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+/* Effetto al passaggio del mouse sui link dell'header */
+nav a:hover {
+    color: #e8a020;
+}
+
+/* contenitore dei contenuti della pagina */
+main {
+    max-width: 1100px;
+    margin: 32px auto;
+    padding: 0 24px;
+}
+
+/* Intestazioni all'interno del contenuto */
+main h2 {
+    font-size: 22px;
+    margin-bottom: 24px;
+    color: #1a1a1a;
+    border-bottom: 2px solid #e8a020;
+    padding-bottom: 8px;
+}
+
+/* Intestazioni all'interno del contenuto */
+main h3 {
+    font-size: 18px;
+    margin: 24px 0 12px;
+    color: #1a1a1a;
+}
+
+/* Footer */
+footer {
+    background-color: #1a1a1a;
+    color: #aaa;
+    text-align: center;
+    padding: 16px;
+    margin-top: 48px;
+    font-size: 14px;
+}
+
+/* Posiziona i pulsanti delle categorie su una o più righe in base allo spazio */
+.categorie {
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.categorie strong {
+    margin-right: 8px;
+}
+
+/* Bottoni categorie */
+.categorie a {
+    background-color: #e8a020;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.categorie a:hover {
+    background-color: #c98010;
+}
+
+/* Griglia prodotti */
+.prodotti {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+/* Singola scheda del prodotto */
+.prodotto {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px;
+    width: 280px;
+}
+
+.prodotto h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.prodotto p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+/* Pulsante prodotto */
+.prodotto a {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.prodotto a:hover {
+    background-color: #e8a020;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    gap: 12px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Campi di testo, menù a tendina e aree di testo */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 15px;
+    width: 100%;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* pulsanti generici */
+button[type="submit"],
+button {
+    background-color: #e8a020;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    width: fit-content; 
+}
+
+button:hover {
+    background-color: #c98010;
+}
+
+/* Riepilogo carrello e ordini*/
+.elemento-carrello,
+.ordine {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+    max-width: 600px;
+}
+
+.elemento-carrello p,
+.ordine p {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+/* Messaggio di errore */
+.errore {
+    background-color: #fdecea;
+    color: #c0392b;
+    padding: 10px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* Errori di validazione JS */
+span.errore {
+    color: #c0392b;
+    font-size: 13px;
+    min-height: 18px;
+    display: block;
+}
+
+/* Messaggio di successo */
+.successo {
+    background-color: #eafaf1;
+    color: #1e8449;
+    padding: 10px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* Link vari */
+a {
+    color: #e8a020;
+    text-decoration: none;
+}
+
+/* sottolineatura solo al passaggio del mouse */
+a:hover {
+    text-decoration: underline;
+}
+
+/* hero */
+.hero {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 48px 32px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.hero h2 {
+    color: #e8a020;
+    border: none;
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 24px;
+}
+
+.btn-hero {
+    background-color: #e8a020;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn-hero:hover {
+    background-color: #c98010;
+    text-decoration: none;
+}
+
+/* sezioni home */
+.sezione-categorie,
+.sezione-prodotti {
+    margin-bottom: 40px;
+}
