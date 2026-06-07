@@ -15,11 +15,9 @@ public class CategoriaDAO {
         //Lista di categorie
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT * FROM categorie";
-
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-
         //Estrazione risultati
         while (rs.next()) {
             Categoria c = new Categoria();
@@ -34,5 +32,40 @@ public class CategoriaDAO {
         ps.close();
         con.close();
         return lista;
+    }
+    //Metodo che inserisce una nuova categoria
+    public void inserisci(Categoria c) throws SQLException {
+        String sql = "INSERT INTO categorie (nome, descrizione) VALUES (?, ?)";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, c.getNome());
+        ps.setString(2, c.getDescrizione());
+        ps.executeUpdate();
+        ps.close();
+        con.close();
+    }
+    
+    //Metodo che aggiorna una categoria esistente
+    public void aggiorna(Categoria c) throws SQLException {
+        String sql = "UPDATE categorie SET nome=?, descrizione=? WHERE id=?";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, c.getNome());
+        ps.setString(2, c.getDescrizione());
+        ps.setInt(3, c.getId());
+        ps.executeUpdate();
+        ps.close();
+        con.close();
+    }
+
+    //Metodo che elimina una categoria
+    public void elimina(int id) throws SQLException {
+        String sql = "DELETE FROM categorie WHERE id=?";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.executeUpdate();
+        ps.close();
+        con.close();
     }
 }

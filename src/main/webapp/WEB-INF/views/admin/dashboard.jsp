@@ -15,6 +15,7 @@
     <nav>
         <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
         <a href="${pageContext.request.contextPath}/admin/prodotti">Gestione prodotti</a>
+        <a href="${pageContext.request.contextPath}/admin/categorie">Gestione categorie</a>
         <a href="${pageContext.request.contextPath}/admin/ordini">Gestione ordini</a>
         <a href="${pageContext.request.contextPath}/logout">Esci</a>
     </nav>
@@ -31,6 +32,7 @@
     <p>Prodotti nel catalogo: <strong><%= prodotti.size() %></strong></p>
     <p>Ordini totali: <strong><%= ordini.size() %></strong></p>
     <a href="${pageContext.request.contextPath}/admin/prodotti">Gestisci prodotti</a>
+    <a href="${pageContext.request.contextPath}/admin/categorie">Gestisci categorie</a>
     <a href="${pageContext.request.contextPath}/admin/ordini">Gestisci ordini</a>
 </main>
 

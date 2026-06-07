@@ -14,6 +14,7 @@
     <nav>
         <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
         <a href="${pageContext.request.contextPath}/admin/prodotti">Gestione prodotti</a>
+        <a href="${pageContext.request.contextPath}/admin/categorie">Gestione categorie</a>
         <a href="${pageContext.request.contextPath}/admin/ordini">Gestione ordini</a>
         <a href="${pageContext.request.contextPath}/logout">Esci</a>
     </nav>

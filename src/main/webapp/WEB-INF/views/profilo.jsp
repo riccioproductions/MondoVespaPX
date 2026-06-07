@@ -27,13 +27,18 @@
         //Estrae l'oggetto utente con i dati attuali passati dalla Servlet
         Utente utente = (Utente) request.getAttribute("utente");
     %>
-    <form action="${pageContext.request.contextPath}/area-utente/profilo" method="post">
+    	<form id="formProfilo" action="${pageContext.request.contextPath}/area-utente/profilo" method="post">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" value="<%= utente.getNome() %>" required>
         <label for="cognome">Cognome:</label>
         <input type="text" id="cognome" name="cognome" value="<%= utente.getCognome() %>" required>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="<%= utente.getEmail() %>" required>
+        <label for="nuovaPassword">Nuova password (lascia vuoto per non cambiarla):</label>
+		<input type="password" id="nuovaPassword" name="nuovaPassword">	
+		<label for="confermaPassword">Conferma nuova password:</label>
+		<input type="password" id="confermaPassword" name="confermaPassword">
+		<span class="errore" id="errorePassword"></span>
         <label for="indirizzo">Indirizzo:</label>
         <input type="text" id="indirizzo" name="indirizzo" value="<%= utente.getIndirizzo() != null ? utente.getIndirizzo() : "" %>">
         <label for="metodoPagamento">Metodo di pagamento:</label>

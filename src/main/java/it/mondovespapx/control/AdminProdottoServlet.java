@@ -92,15 +92,36 @@ public class AdminProdottoServlet extends HttpServlet {
             //Modifica di un prodotto
             } else if ("modifica".equals(azione)) {
                 Prodotto p = new Prodotto(); 
-                //Prende l'ID del prodotto da cambiare e aggiorna tutti i suoi dati
-                p.setId(Integer.parseInt(request.getParameter("id")));
+                
+                // Prende l'ID del prodotto da cambiare e aggiorna tutti i suoi dati
+                int idProdotto = Integer.parseInt(request.getParameter("id"));
+                p.setId(idProdotto);
                 p.setNome(request.getParameter("nome"));
                 p.setDescrizione(request.getParameter("descrizione"));
                 p.setPrezzo(Double.parseDouble(request.getParameter("prezzo")));
-                p.setQuantitaDisponibile(Integer.parseInt(request.getParameter("quantita"))); 
-                //l'immagine viene letta come semplice testo
-                p.setImmagine(request.getParameter("immagine"));
-                p.setIdCategoria(Integer.parseInt(request.getParameter("idCategoria")));
+                p.setQuantitaDisponibile(Integer.parseInt(request.getParameter("quantita")));           
+                String idCategoriaParam = request.getParameter("idCategoria");
+                if (idCategoriaParam != null && !idCategoriaParam.isEmpty()) {
+                    p.setIdCategoria(Integer.parseInt(idCategoriaParam));
+                }
+                //Modifica dell'immagine
+                Part filePart = request.getPart("immagine");
+                if (filePart != null && filePart.getSize() > 0) {
+                    // L'utente ha caricato un nuovo file: lo salvo e aggiorno il nome
+                    String nomeFile = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    String uploadPath = getServletContext().getRealPath("/images/");
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) uploadDir.mkdirs();
+                    InputStream input = filePart.getInputStream();
+                    Files.copy(input, new File(uploadDir, nomeFile).toPath(), StandardCopyOption.REPLACE_EXISTING);                    
+                    p.setImmagine(nomeFile);
+                } else {
+                    //Se l'utente non ha caricato un file. l'immagine originale viene recuperata direttamente dal DB.
+                    Prodotto prodottoOriginale = dao.getProdottoById(idProdotto);
+                    if (prodottoOriginale != null) {
+                        p.setImmagine(prodottoOriginale.getImmagine());
+                    }
+                }
                 //Aggiorna i dati nel database
                 dao.aggiorna(p);
 

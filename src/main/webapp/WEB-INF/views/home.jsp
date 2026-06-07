@@ -70,6 +70,8 @@
             %>
                 <div class="prodotto">
                     <h3><%= p.getNome() %></h3>
+                    <% if (p.getImmagine() != null) { %>
+    				<img src="${pageContext.request.contextPath}/images/<%= p.getImmagine() %>" alt="<%= p.getNome() %>" width="200"><% } %>
                     <p><%= p.getDescrizione() %></p>
                     <p>Prezzo: <%= p.getPrezzo() %> €</p>
                     <a href="${pageContext.request.contextPath}/prodotto?id=<%= p.getId() %>">Dettagli</a>

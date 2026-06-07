@@ -184,4 +184,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	    });
 	}
 	
+	/* Validazione profilo per cambio password */
+
+	var formProfilo = document.getElementById("formProfilo");
+	if (formProfilo) {
+	    formProfilo.addEventListener("submit", function(e) {
+	        var nuovaPassword = document.getElementById("nuovaPassword");
+	        var confermaPassword = document.getElementById("confermaPassword");
+	        var errore = document.getElementById("errorePassword");
+
+	        if (nuovaPassword.value !== "" && nuovaPassword.value.length < 6) {
+	            errore.textContent = "La password deve avere almeno 6 caratteri";
+	            e.preventDefault();
+	            return;
+	        }
+
+	        if (nuovaPassword.value !== confermaPassword.value) {
+	            errore.textContent = "Le password non coincidono";
+	            e.preventDefault();
+	            return;
+	        }
+
+	        errore.textContent = "";
+	    });
+	}
 });

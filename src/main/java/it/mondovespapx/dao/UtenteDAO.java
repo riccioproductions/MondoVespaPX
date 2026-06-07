@@ -84,4 +84,15 @@ public class UtenteDAO {
         ps.close();
         con.close();
     }
+    
+    public void aggiornaPassword(int idUtente, String nuovaPassword) throws SQLException {
+        String sql = "UPDATE utenti SET password=? WHERE id=?";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, HashUtil.sha512(nuovaPassword));
+        ps.setInt(2, idUtente);
+        ps.executeUpdate();
+        ps.close();
+        con.close();
+    }
 }

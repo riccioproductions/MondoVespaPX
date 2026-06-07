@@ -53,12 +53,28 @@ public class ProfiloServlet extends HttpServlet {
         utente.setIndirizzo(indirizzo);
         utente.setMetodoPagamento(metodoPagamento);
 
-        // Prepara la connessione al database
+        //Prepara la connessione al database
         UtenteDAO dao = new UtenteDAO();
         try {
             //Esegue l'aggiornamento sul database
             dao.aggiorna(utente);
-            
+            //Cambio password eventuale
+            String nuovaPassword = request.getParameter("nuovaPassword");
+            String confermaPassword = request.getParameter("confermaPassword");
+            if (nuovaPassword != null && !nuovaPassword.isEmpty()) {
+                if (nuovaPassword.equals(confermaPassword)) {
+                    dao.aggiornaPassword(utente.getId(), nuovaPassword);
+                    request.setAttribute("messaggio", "Profilo e password aggiornati con successo");
+                } else {
+                    request.setAttribute("errore", "Le password non coincidono");
+                    request.setAttribute("utente", utente);
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/profilo.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+            } else {
+                request.setAttribute("messaggio", "Profilo aggiornato con successo");
+            }
             //Salva nuovamente l'utente in sessione per mantenere i dati aggiornati in memoria
             session.setAttribute("utente", utente);
             
