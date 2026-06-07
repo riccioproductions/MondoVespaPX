@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MondoVespaPX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
     <script src="${pageContext.request.contextPath}/scripts/validazione.js" defer></script>

@@ -92,24 +92,29 @@ public class OrdineDAO {
             //Prepara la query per inserire i singoli prodotti legandoli all'ID dell'ordine appena creato
             String sqlDettaglio = "INSERT INTO dettagli_ordine (id_ordine, id_prodotto, quantita, prezzo_unitario) VALUES (?, ?, ?, ?)";
             PreparedStatement psD = con.prepareStatement(sqlDettaglio);
+            String sqlQuantita = "UPDATE prodotti SET quantita_disponibile = quantita_disponibile - ? " +
+                                 "WHERE id = ? AND quantita_disponibile >= ?";
+            PreparedStatement psQ = con.prepareStatement(sqlQuantita);
 
-            //Scorre il carrello e inserisce i prodotti uno alla volta
             for (DettaglioOrdine d : dettagli) {
                 psD.setInt(1, idOrdine);
                 psD.setInt(2, d.getIdProdotto());
                 psD.setInt(3, d.getQuantita());
                 psD.setDouble(4, d.getPrezzoUnitario());
                 psD.executeUpdate();
+
+                psQ.setInt(1, d.getQuantita());
+                psQ.setInt(2, d.getIdProdotto());
+                psQ.setInt(3, d.getQuantita());
+                psQ.executeUpdate();
             }
 
-            //Conferma le operazioni: scrive definitivamente ordine e dettagli nel database
             con.commit();
 
-            //Chiusura risorse
             rs.close();
             ps.close();
             psD.close();
-
+            psQ.close();
         } catch (SQLException e) {
             //Se fallisce l'inserimento di una qualsiasi riga annulla l'intera operazione evitando ordini a metà
             con.rollback();

@@ -32,4 +32,4 @@ Aggiungere in C:\tomcat11\conf\context.xml dentro <Context>:
 
 Credenziali admin:
 Email: admin@mondovespapx.it
-Password: admin1234
+Password: admin1234 (Da cambiare subito appena si accede)
