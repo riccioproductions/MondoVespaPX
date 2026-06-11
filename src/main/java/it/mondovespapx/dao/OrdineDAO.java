@@ -14,14 +14,11 @@ public class OrdineDAO {
     //Recupera lo storico degli ordini effettuati da uno specifico utente
     public List<Ordine> getOrdiniByUtente(int idUtente) throws SQLException {
         List<Ordine> lista = new ArrayList<>();
-        // Query per estrarre gli ordini dal più recente al più vecchio
         String sql = "SELECT * FROM ordini WHERE id_utente = ? ORDER BY data_ordine DESC";
-
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, idUtente);
         ResultSet rs = ps.executeQuery();
-
         while (rs.next()) {
             Ordine o = new Ordine();
             o.setId(rs.getInt("id"));
@@ -29,20 +26,20 @@ public class OrdineDAO {
             o.setDataOrdine(rs.getTimestamp("data_ordine"));
             o.setStato(rs.getString("stato"));
             o.setTotale(rs.getDouble("totale"));
+            //Righe aggiunte per mappare i campi mancanti
+            o.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
+            o.setMetodoPagamento(rs.getString("metodo_pagamento"));
             lista.add(o);
         }
-
         rs.close();
         ps.close();
         con.close();
-
         return lista;
     }
 
     //Recupera i prodotti che compongono un ordine specifico
     public List<DettaglioOrdine> getDettagliByOrdine(int idOrdine) throws SQLException {
         List<DettaglioOrdine> lista = new ArrayList<>();
-        //Esegue una JOIN con la tabella prodotti per poter mostrare il nome del ricambio
         String sql = "SELECT d.*, p.nome FROM dettagli_ordine d " +
                      "JOIN prodotti p ON d.id_prodotto = p.id " +
                      "WHERE d.id_ordine = ?";
@@ -69,27 +66,21 @@ public class OrdineDAO {
     //Salva un nuovo ordine e i relativi dettagli nel database
     public void inserisciOrdine(Ordine o, List<DettaglioOrdine> dettagli) throws SQLException {
         Connection con = DBConnection.getConnection();
-        //Disabilita il salvataggio automatico per far eseguire le query solo quando viene chiamato commit
         con.setAutoCommit(false);
         try {
-            //Inserisce i dati generali dell'ordine (totale, utente, stato)
-        	String sqlOrdine = "INSERT INTO ordini (id_utente, totale, stato, indirizzo_spedizione, metodo_pagamento) " +
-                    "VALUES (?, ?, 'in attesa', ?, ?)";
-        		PreparedStatement ps = con.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS);
-        		ps.setInt(1, o.getIdUtente());
-        		ps.setDouble(2, o.getTotale());
-        		ps.setString(3, o.getIndirizzoSpedizione());
-        		ps.setString(4, o.getMetodoPagamento());
+            String sqlOrdine = "INSERT INTO ordini (id_utente, totale, stato, indirizzo_spedizione, metodo_pagamento) " +
+                               "VALUES (?, ?, 'in attesa', ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, o.getIdUtente());
+            ps.setDouble(2, o.getTotale());
+            ps.setString(3, o.getIndirizzoSpedizione());
+            ps.setString(4, o.getMetodoPagamento());
             ps.executeUpdate();
-
-            //Legge l'ID generato per il nuovo ordine
             ResultSet rs = ps.getGeneratedKeys();
             int idOrdine = 0;
             if (rs.next()) {
                 idOrdine = rs.getInt(1);
             }
-
-            //Prepara la query per inserire i singoli prodotti legandoli all'ID dell'ordine appena creato
             String sqlDettaglio = "INSERT INTO dettagli_ordine (id_ordine, id_prodotto, quantita, prezzo_unitario) VALUES (?, ?, ?, ?)";
             PreparedStatement psD = con.prepareStatement(sqlDettaglio);
             String sqlQuantita = "UPDATE prodotti SET quantita_disponibile = quantita_disponibile - ? " +
@@ -108,19 +99,15 @@ public class OrdineDAO {
                 psQ.setInt(3, d.getQuantita());
                 psQ.executeUpdate();
             }
-
             con.commit();
-
             rs.close();
             ps.close();
             psD.close();
             psQ.close();
         } catch (SQLException e) {
-            //Se fallisce l'inserimento di una qualsiasi riga annulla l'intera operazione evitando ordini a metà
             con.rollback();
             throw e;
         } finally {
-            //Ripristina il comportamento standard della connessione prima di chiuderla
             con.setAutoCommit(true);
             con.close();
         }
@@ -135,7 +122,6 @@ public class OrdineDAO {
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-
         while (rs.next()) {
             Ordine o = new Ordine();
             o.setId(rs.getInt("id"));
@@ -144,6 +130,8 @@ public class OrdineDAO {
             o.setDataOrdine(rs.getTimestamp("data_ordine"));
             o.setStato(rs.getString("stato"));
             o.setTotale(rs.getDouble("totale"));
+            o.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
+            o.setMetodoPagamento(rs.getString("metodo_pagamento"));
             lista.add(o);
         }
         rs.close();
@@ -156,18 +144,16 @@ public class OrdineDAO {
     //Aggiorna lo stato dell'ordine
     public void aggiornaStato(int idOrdine, String stato) throws SQLException {
         String sql = "UPDATE ordini SET stato=? WHERE id=?";
-
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, stato);
         ps.setInt(2, idOrdine);
         ps.executeUpdate();
-
         ps.close();
         con.close();
     }
     
-    //Restituisce gli ordini filtrati per data
+    // Restituisce gli ordini filtrati per data e cliente
     public List<Ordine> getOrdiniFiltrati(String dataInizio, String dataFine, String cliente) throws SQLException {
         List<Ordine> lista = new ArrayList<>();
         String sql = "SELECT o.*, u.nome, u.cognome FROM ordini o " +
@@ -182,7 +168,6 @@ public class OrdineDAO {
         if (cliente != null && !cliente.isEmpty()) {
             sql += "AND (u.nome LIKE ? OR u.cognome LIKE ? OR u.email LIKE ?) ";
         }
-
         sql += "ORDER BY o.data_ordine DESC";
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
@@ -207,6 +192,8 @@ public class OrdineDAO {
             o.setDataOrdine(rs.getTimestamp("data_ordine"));
             o.setStato(rs.getString("stato"));
             o.setTotale(rs.getDouble("totale"));
+            o.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
+            o.setMetodoPagamento(rs.getString("metodo_pagamento"));
             lista.add(o);
         }
         rs.close();

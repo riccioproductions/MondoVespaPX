@@ -76,13 +76,13 @@
             } 
     %>
         <p><strong>Totale carrello: <%= totale %> €</strong></p>
-
-        <form action="${pageContext.request.contextPath}/carrello" method="post">
-            <input type="hidden" name="azione" value="svuota">
-            <button type="submit">Svuota carrello</button>
-        </form>
-
-        <a href="${pageContext.request.contextPath}/area-utente/ordine">Procedi all'acquisto</a>
+        <div class="carrello-azioni">
+    <form action="${pageContext.request.contextPath}/carrello" method="post">
+        <input type="hidden" name="azione" value="svuota">
+        <button type="submit" class="btn">Svuota carrello</button>
+    </form>
+    	<a href="${pageContext.request.contextPath}/area-utente/ordine" class="btn" role="button"> Procedi all'acquisto</a>
+		</div>
     <%
         } 
     %>

@@ -37,7 +37,7 @@ CREATE TABLE ordini (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_utente INT NOT NULL,
     data_ordine TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    stato ENUM('in attesa', 'confermato', 'spedito', 'consegnato') DEFAULT 'in attesa',
+    stato ENUM('in attesa', 'confermato', 'spedito', 'consegnato', 'annullato') DEFAULT 'in attesa',
     totale DECIMAL(10,2) NOT NULL,
     indirizzo_spedizione VARCHAR(255),
     metodo_pagamento VARCHAR(50),

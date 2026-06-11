@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.mondovespapx.model.Ordine" %>
 <%@ page import="it.mondovespapx.model.Utente" %>
+<%@ page import="it.mondovespapx.model.DettaglioOrdine" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,29 +36,55 @@
 </header>
 <main>
     <h2>I miei ordini</h2>
-    <%
-        //Recupera l'elenco degli ordini passato dalla Servlet
-        List<Ordine> ordini = (List<Ordine>) request.getAttribute("ordini");  
-        //Controlla se la lista è vuota o non esiste
-        if (ordini == null || ordini.isEmpty()) {
-    %>
-        <p>Non hai ancora effettuato ordini.</p>
-        <a href="${pageContext.request.contextPath}/catalogo">Vai al catalogo</a>
-    <%
-        } else {
-            for (Ordine o : ordini) {
-    %>
-        <div class="ordine">
-            <%--Estrae e stampa i parametri dell'ordine tramite i metodi getter--%>
-            <p><strong>Ordine #<%= o.getId() %></strong></p>
-            <p>Data: <%= o.getDataOrdine() %></p>
-            <p>Stato: <%= o.getStato() %></p>
-            <p>Totale: <%= o.getTotale() %> €</p>
-        </div>
-    <%
-            } 
-        } 
-    %>
+<%
+    //Recupera l'elenco degli ordini passato dalla servlet
+    List<Ordine> ordini = (List<Ordine>) request.getAttribute("ordini");
+    
+    if (ordini == null || ordini.isEmpty()) {
+%>
+    <p>Non hai ancora effettuato ordini.</p>
+    <a href="${pageContext.request.contextPath}/catalogo">Vai al catalogo</a>
+<%
+    } else {
+        for (Ordine o : ordini) {
+            List<DettaglioOrdine> dettagli = o.getDettagli();
+%>
+    <div class="ordine">
+        <p><strong>Ordine #<%= o.getId() %></strong></p>
+        <p>Data: <%= o.getDataOrdine() %></p>
+        <p>Stato: <strong><%= o.getStato() %></strong></p>
+        <p>Metodo di pagamento: <%= o.getMetodoPagamento() %></p>     
+        <p>Indirizzo spedizione: <%= o.getIndirizzoSpedizione() %></p>
+        <p>Totale: <%= o.getTotale() %> €</p>
+        <table class="tabella-dettagli">
+            <tr>
+                <th>Prodotto</th>
+                <th>Quantità</th>
+                <th>Prezzo unitario</th>
+            </tr>
+            <%
+                if (dettagli != null) {
+                    for (DettaglioOrdine d : dettagli) {
+            %>
+            <tr>
+                <td><%= d.getNomeProdotto() != null ? d.getNomeProdotto() : "Prodotto eliminato" %></td>
+                <td><%= d.getQuantita() %></td>
+                <td><%= d.getPrezzoUnitario() %> €</td>
+            </tr>
+            <%
+                    }
+                } else {
+            %>
+            <tr><td colspan="3">Dettagli non disponibili.</td></tr>
+            <%
+                }
+            %>
+        </table>
+    </div>
+<%
+        }
+    }
+%>
 </main>
 <footer>
     <p>MondoVespaPX - Ricambi Vespa PX</p>

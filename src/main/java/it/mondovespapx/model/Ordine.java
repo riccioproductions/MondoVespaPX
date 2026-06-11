@@ -1,4 +1,6 @@
 package it.mondovespapx.model;
+import java.util.List;
+import it.mondovespapx.model.DettaglioOrdine;
 
 import java.sql.Timestamp;
 //Intestazione di un ordine effettuato sul sito
@@ -11,6 +13,7 @@ public class Ordine {
     private String nomeUtente;
     private String indirizzoSpedizione;
     private String metodoPagamento;
+    private List<DettaglioOrdine> dettagli;
 
     //Metodi Getters e setters
 
@@ -74,4 +77,12 @@ public class Ordine {
     public void setMetodoPagamento(String metodoPagamento) {
     	this.metodoPagamento = metodoPagamento; 
     	}
+    
+    public List<DettaglioOrdine> getDettagli() {
+        return dettagli;
+    }
+
+    public void setDettagli(List<DettaglioOrdine> dettagli) {
+        this.dettagli = dettagli;
+    }
 }

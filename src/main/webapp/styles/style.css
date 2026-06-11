@@ -367,3 +367,47 @@ a:hover {
         width: 100%;
     }
 }
+
+.tabella-dettagli {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.tabella-dettagli th {
+    background-color: #102A43;
+    color: white;
+    padding: 8px;
+    text-align: left;
+}
+
+.tabella-dettagli td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.carrello-azioni {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    background-color: #008CBA;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #005F8A;
+}
