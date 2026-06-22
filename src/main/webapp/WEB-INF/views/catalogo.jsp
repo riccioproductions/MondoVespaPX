@@ -55,21 +55,35 @@
         %>
     </div>
 
-    <div class="prodotti">
+<%
+    Categoria cat = (Categoria) request.getAttribute("categoriaSelezionata");
+    if (cat != null) {
+%>
+    <div class="header-categoria">
+        <h1><%= cat.getNome() %></h1>
+        <p class="descrizione-categoria"><%= cat.getDescrizione() %></p>
+    </div>
+<% 
+} 
+%>
+
+<div class="prodotti">
         <%
-            //Recupera la lista dei prodotti passata dalla Servlet
             List<Prodotto> prodotti = (List<Prodotto>) request.getAttribute("prodotti");
+            //Controllo lista prodotti
             if (prodotti == null || prodotti.isEmpty()) {
         %>
             <p>Nessun prodotto disponibile.</p>
         <%
             } else {
+                //Stampa dei prodotti
                 for (Prodotto p : prodotti) {
         %>
             <div class="prodotto">
                 <h3><%= p.getNome() %></h3>
                 <% if (p.getImmagine() != null) { %>
-    			<img src="${pageContext.request.contextPath}/images/<%= p.getImmagine() %>" alt="<%= p.getNome() %>" width="200"><% } %>
+                    <img src="${pageContext.request.contextPath}/images/<%= p.getImmagine() %>" alt="<%= p.getNome() %>" width="200">
+                <% } %>
                 <p><%= p.getDescrizione() %></p>
                 <p>Prezzo: <%= p.getPrezzo() %> €</p>
                 <a href="${pageContext.request.contextPath}/prodotto?id=<%= p.getId() %>">Dettagli</a>
@@ -79,9 +93,7 @@
             }
         %>
     </div>
-
 </main>
-
 <footer>
     <p>MondoVespaPX - Ricambi Vespa PX</p>
 </footer>

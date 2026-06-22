@@ -33,6 +33,27 @@ public class CategoriaDAO {
         con.close();
         return lista;
     }
+    
+ //Metodo che restituisce una singola categoria dato il suo ID
+    public Categoria getCategoriaById(int id) throws SQLException {
+        Categoria c = null;
+        String sql = "SELECT * FROM categorie WHERE id = ?";
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();        
+        if (rs.next()) {
+            c = new Categoria();
+            c.setId(rs.getInt("id"));
+            c.setNome(rs.getString("nome"));
+            c.setDescrizione(rs.getString("descrizione"));
+        }        
+        rs.close();
+        ps.close();
+        con.close();      
+        return c; //Ritorna l'oggetto o null se non trovato
+    }
+    
     //Metodo che inserisce una nuova categoria
     public void inserisci(Categoria c) throws SQLException {
         String sql = "INSERT INTO categorie (nome, descrizione) VALUES (?, ?)";

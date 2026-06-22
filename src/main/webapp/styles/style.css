@@ -411,3 +411,10 @@ a:hover {
 .btn:hover {
     background-color: #005F8A;
 }
+
+.header-categoria {
+    width: 100%;      /* Forza il titolo a occupare l'intera larghezza */
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ccc;
+}

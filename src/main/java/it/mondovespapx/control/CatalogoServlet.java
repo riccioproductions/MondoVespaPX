@@ -37,6 +37,10 @@ public class CatalogoServlet extends HttpServlet {
             if (categoriaParam != null && !categoriaParam.isEmpty()) {
                 int idCategoria = Integer.parseInt(categoriaParam);
                 prodotti = prodottoDAO.getProdottiByCategoria(idCategoria);
+                Categoria cat = categoriaDAO.getCategoriaById(idCategoria);
+                if (cat != null) {
+                    request.setAttribute("categoriaSelezionata", cat);
+                }
             } else {
                 //Se non c'è nessuna categoria carica tutti i prodotti
                 prodotti = prodottoDAO.getAllProdotti();
