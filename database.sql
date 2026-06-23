@@ -75,4 +75,4 @@ INSERT INTO prodotti (nome, descrizione, prezzo, quantita_disponibile, immagine,
 ('Espansione Sito', 'Espansione Sito Racing per Vespa PX 125/150', 145.00, 5, null, 3),
 ('Kit freni completo', 'Ganasce freno anteriore e posteriore', 32.00, 25, null, 4),
 ('Parafango anteriore', 'Parafango anteriore grezzo da verniciare', 89.00, 10, null, 5),
-('Frizione completa', 'Frizione completa di dischi (già montata), 6 molle, pignone da 21 denti', 38.00, 18, null, 6),
+('Frizione completa', 'Frizione completa di dischi (già montata), 6 molle, pignone da 21 denti', 38.00, 18, null, 6);
